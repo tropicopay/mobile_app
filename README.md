@@ -30,7 +30,7 @@ Aplicação mobile em React Native usando o Expo
 ## Running
 Para startar o projeto basta executar o comando
 ```shell
-	$ npm start
+    $ yarn run
 ```
 ou
 ```shell
