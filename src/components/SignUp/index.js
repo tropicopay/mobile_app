@@ -12,6 +12,8 @@ import {
 } from './styles';
 import LogoFile from '../../../assets/logo.png'
 import { CpfMask } from '../../util/mask'
+import { api } from '../../services/api'
+
 
 export default function Home({ navigation }) {
 
@@ -23,6 +25,20 @@ export default function Home({ navigation }) {
 
     const handleSignUp = () => {
         Alert.alert(JSON.stringify({ nomeCompleto, email, cpf, confirmPassword, password }))
+    }
+
+    async function handleCadatroUser() {
+        try {
+            setLoading(true)
+            handleSignUp()
+            const response = await api.post('/users', { nomeCompleto, email, cpf, confirmPassword, password })
+            Alert.alert(nomeCompleto + ' Cadastro Concluido!' )
+            navigation.navigate('SignIn')
+        } catch (error) {
+            console.log(error)
+            Alert.alert('Não foi possivel efetuar o cadastro. Entre em contato com nossos canais de ajuda.')
+            setLoading(false)
+        }
     }
 
     return (
@@ -37,7 +53,7 @@ export default function Home({ navigation }) {
                     <TextInput value={confirmPassword} onChangeText={text => setConfirmPassword(text)} secureTextEntry={true} textContentType="password" placeholder="Confirmar senha"></TextInput>
                 </FormContainer>
                 <FormContainer>
-                    <SignUpButton onPress={handleSignUp}>
+                    <SignUpButton  onPress={() => handleCadatroUser()}>
                         <SignUpButtonLabel>cadastrar</SignUpButtonLabel>
                     </SignUpButton>
                     <CancelButton>
