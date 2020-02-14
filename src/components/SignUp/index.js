@@ -22,6 +22,7 @@ export default function Home({ navigation }) {
     const [cpf, setCpf] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const handleSignUp = () => {
         Alert.alert(JSON.stringify({ nomeCompleto, email, cpf, confirmPassword, password }))
@@ -53,9 +54,13 @@ export default function Home({ navigation }) {
                     <TextInput value={confirmPassword} onChangeText={text => setConfirmPassword(text)} secureTextEntry={true} textContentType="password" placeholder="Confirmar senha"></TextInput>
                 </FormContainer>
                 <FormContainer>
-                    <SignUpButton  onPress={() => handleCadatroUser()}>
-                        <SignUpButtonLabel>cadastrar</SignUpButtonLabel>
-                    </SignUpButton>
+                    {loading ?
+                        <ActivityIndicator size="small" color="#ffff" /> :
+                        <SignUpButton  onPress={() => handleCadatroUser()}>
+                            <SignUpButtonLabel>cadastrar</SignUpButtonLabel>
+                        </SignUpButton>
+                     }
+                    
                     <CancelButton>
                         <CancelButtonLabel onPress={() => { navigation.navigate('SignIn') }}>Cancelar</CancelButtonLabel>
                     </CancelButton>
