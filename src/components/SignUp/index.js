@@ -10,9 +10,10 @@ import {
     CancelButton,
     CancelButtonLabel
 } from './styles';
-import LogoFile from '../../assets/logo.png'
-import { mask } from '../util/cpfMask'
-export default function Home() {
+import LogoFile from '../../../assets/logo.png'
+import { CpfMask } from '../../util/mask'
+
+export default function Home({ navigation }) {
 
     const [nomeCompleto, setNomeCompleto] = useState('')
     const [email, setEmail] = useState('')
@@ -21,8 +22,7 @@ export default function Home() {
     const [confirmPassword, setConfirmPassword] = useState('')
 
     const handleSignUp = () => {
-        //Alert.alert(JSON.stringify({ nomeCompleto, email, cpf, confirmPassword, password }))
-        Alert.alert('Cadastro efetuado!')
+        Alert.alert(JSON.stringify({ nomeCompleto, email, cpf, confirmPassword, password }))
     }
 
     return (
@@ -32,7 +32,7 @@ export default function Home() {
                 <FormContainer>
                     <TextInput value={nomeCompleto} onChangeText={text => setNomeCompleto(text)} placeholder="Nome completo" ></TextInput>
                     <TextInput value={email} onChangeText={text => setEmail(text)} autoCapitalize="none" placeholder="Email"></TextInput>
-                    <TextInput value={nomeCompleto} onChangeText={text => setNomeCompleto(text)} placeholder="CPF" value={cpf} onChangeText={text => setCpf(mask(text))}></TextInput>
+                    <TextInput value={nomeCompleto} onChangeText={text => setNomeCompleto(text)} placeholder="CPF" value={cpf} onChangeText={text => setCpf(CpfMask(text))}></TextInput>
                     <TextInput value={password} onChangeText={text => setPassword(text)} secureTextEntry={true} textContentType="password" placeholder="Senha"></TextInput>
                     <TextInput value={confirmPassword} onChangeText={text => setConfirmPassword(text)} secureTextEntry={true} textContentType="password" placeholder="Confirmar senha"></TextInput>
                 </FormContainer>
@@ -41,7 +41,7 @@ export default function Home() {
                         <SignUpButtonLabel>cadastrar</SignUpButtonLabel>
                     </SignUpButton>
                     <CancelButton>
-                        <CancelButtonLabel>Cancelar</CancelButtonLabel>
+                        <CancelButtonLabel onPress={() => { navigation.navigate('SignIn') }}>Cancelar</CancelButtonLabel>
                     </CancelButton>
                 </FormContainer>
             </Container>

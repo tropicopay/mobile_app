@@ -38,5 +38,5 @@ export const CancelButton = styled.TouchableOpacity`
    margin-bottom:36px;
 `
 export const CancelButtonLabel = styled.Text`
-     color: #8583a4;
+     color: #8583a4; 
 `
