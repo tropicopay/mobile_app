@@ -1,48 +1,21 @@
 import * as React from 'react';
 import 'react-native-gesture-handler';
-import { AsyncStorage } from 'react-native';
 import Loading from './src/components/Loading';
 import SignIn from './src/components/SignIn';
 import SignUp from './src/components/SignUp';
 import Home from './src/components/Home';
+import HeaderHome from './src/components/Home/HomeHeader'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Context from './src/store'
-import { setToken, getToken, clearToken } from './src/util/token'
+import Context from './src/store';
+import { AuthActions } from './src/store/actions';
+import { setToken, getToken, clearToken } from './src/util/token';
 
 const Stack = createStackNavigator();
-const AuthContext = Context.AuthContext;
+const AuthContext = Context.getAuthContext();
 
-export default function App({ navigation }) {
-  const [state, dispatch] = React.useReducer(
-    (prevState, action) => {
-      switch (action.type) {
-        case 'RESTORE_TOKEN':
-          return {
-            ...prevState,
-            userToken: action.token,
-            isLoading: false,
-          };
-        case 'SIGN_IN':
-          return {
-            ...prevState,
-            isSignout: false,
-            userToken: action.token,
-          };
-        case 'SIGN_OUT':
-          return {
-            ...prevState,
-            isSignout: true,
-            userToken: null,
-          };
-      }
-    },
-    {
-      isLoading: true,
-      isSignout: false,
-      userToken: null,
-    }
-  );
+export default function App() {
+  const [state, dispatch] = React.useReducer(AuthActions, Context.getAuthInitialState());
 
   React.useEffect(() => {
     const bootstrapAsync = async () => {
@@ -68,11 +41,7 @@ export default function App({ navigation }) {
         dispatch({ type: 'SIGN_OUT' })
       },
       signUp: async data => {
-        // In a production app, we need to send user data to server and get a token
-        // We will also need to handle errors if sign up failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
-        dispatch({ type: 'SIGN_IN', token: data });
+        dispatch({ type: 'SIGN_IN', token: data ? data : null });
       },
     }),
     []
@@ -96,10 +65,13 @@ export default function App({ navigation }) {
                   animationTypeForReplace: state.isSignout ? 'pop' : 'push',
                 }}
               />
-              <Stack.Screen name="SignUp" component={SignUp}/>
+              <Stack.Screen name="SignUp" component={SignUp} />
             </>
           ) : (
-                <Stack.Screen name="Home" component={Home} />
+                <Stack.Screen
+                  name="Home"
+                  component={Home}
+                />
               )}
         </Stack.Navigator>
       </AuthContext.Provider>
